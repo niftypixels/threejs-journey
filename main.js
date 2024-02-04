@@ -47,9 +47,7 @@ cubeTweaks
 
 cubeTweaks
   .addColor(debug, 'color')
-  .onChange(() => {
-    material.color.set(debug.color);
-  });
+  .onChange(() => material.color.set(debug.color));
 
 cubeTweaks
   .add(debug, 'subdivision')
