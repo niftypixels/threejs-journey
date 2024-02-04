@@ -7,7 +7,6 @@ import './style.css';
 const canvas = document.getElementById('webgl');
 
 const loadingManager = new THREE.LoadingManager();
-
 const textureLoader = new THREE.TextureLoader(loadingManager);
 
 const textures = {
@@ -38,13 +37,13 @@ const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
 
 debug.color = '#8f0';
-debug.subdivision = 2;
+debug.subdivision = 3;
 
 const geometry = new THREE.BoxGeometry(1, 1, 1, debug.subdivision, debug.subdivision, debug.subdivision);
 const material = new THREE.MeshBasicMaterial({
   // color: debug.color,
   map: textures.basecolor,
-  // wireframe: true
+  wireframe: true
 });
 const mesh = new THREE.Mesh(geometry, material);
 scene.add(mesh);
@@ -69,16 +68,24 @@ cubeTweaks
 cubeTweaks
   .add(debug, 'subdivision')
   .min(1)
-  .max(20)
+  .max(9)
   .step(1)
   .onFinishChange(() => {
     mesh.geometry.dispose();
     mesh.geometry = new THREE.BoxGeometry(1, 1, 1, debug.subdivision, debug.subdivision, debug.subdivision);
   });
 
+debug.rotateX = () => gsap.to(mesh.rotation, { x: mesh.rotation.x + Math.PI * 2 });
+cubeTweaks
+  .add(debug, 'rotateX');
+
 debug.rotateY = () => gsap.to(mesh.rotation, { y: mesh.rotation.y + Math.PI * 2 });
 cubeTweaks
   .add(debug, 'rotateY');
+
+debug.rotateZ = () => gsap.to(mesh.rotation, { z: mesh.rotation.z + Math.PI * 2 });
+cubeTweaks
+  .add(debug, 'rotateZ');
 
 camera.position.z = 3;
 
