@@ -4,6 +4,24 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import './style.css';
 
+const canvas = document.getElementById('webgl');
+
+const loadingManager = new THREE.LoadingManager();
+
+const textureLoader = new THREE.TextureLoader(loadingManager);
+
+const textures = {
+  ambientOcclusion: textureLoader.load('/textures/door/ambientOcclusion.jpg'),
+  basecolor: textureLoader.load('/textures/door/basecolor.jpg'),
+  height: textureLoader.load('/textures/door/height.png'),
+  metallic: textureLoader.load('/textures/door/metallic.jpg'),
+  normal: textureLoader.load('/textures/door/normal.jpg'),
+  opacity: textureLoader.load('/textures/door/opacity.jpg'),
+  roughness: textureLoader.load('/textures/door/roughness.jpg'),
+};
+
+textures.basecolor.colorSpace = THREE.SRGBColorSpace;
+
 const gui = new GUI().close();
 const cubeTweaks = gui.addFolder('Cube Tweaks');
 const debug = {};
@@ -11,8 +29,6 @@ const debug = {};
 const scene = new THREE.Scene();
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-
-const canvas = document.getElementById('webgl');
 
 const renderer = new THREE.WebGL1Renderer({ canvas });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -26,8 +42,9 @@ debug.subdivision = 2;
 
 const geometry = new THREE.BoxGeometry(1, 1, 1, debug.subdivision, debug.subdivision, debug.subdivision);
 const material = new THREE.MeshBasicMaterial({
-  color: debug.color,
-  wireframe: true
+  // color: debug.color,
+  map: textures.basecolor,
+  // wireframe: true
 });
 const mesh = new THREE.Mesh(geometry, material);
 scene.add(mesh);
